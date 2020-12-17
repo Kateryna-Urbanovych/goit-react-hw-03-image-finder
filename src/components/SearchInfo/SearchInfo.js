@@ -4,6 +4,7 @@ import pixabayAPI from '../../servises/pixabay-api';
 import ImageGallery from '../ImageGallery';
 import Button from '../Button';
 import LoaderSpinner from '../LoaderSpinner';
+import s from './SearchInfo.module.css';
 
 class SearchInfo extends PureComponent {
     state = {
@@ -16,26 +17,19 @@ class SearchInfo extends PureComponent {
     componentDidUpdate(prevProps, prevState) {
         const prevImageValue = prevProps.imageValue;
         const nextImageValue = this.props.imageValue;
-        const { page } = this.state;
+        const prevPage = prevState.page;
+        const nextPage = this.state.page;
 
-        // console.log(this.state.page);
-
-        if (prevImageValue !== nextImageValue || prevState.page !== page) {
-            this.setState({ status: 'pending' });
-
-            if (prevImageValue !== nextImageValue) {
-                this.setState({
-                    images: [],
-                    page: 1,
-                });
-            }
+        if (prevImageValue !== nextImageValue) {
+            this.setState({
+                status: 'pending',
+                images: [],
+                page: 1,
+            });
 
             pixabayAPI
-                .fetchImage(nextImageValue, page)
+                .fetchImage(nextImageValue, nextPage)
                 .then(images => {
-                    console.log('images.hits', images.hits);
-                    // console.log('this.state.images', this.state.images);
-
                     if (images.hits.length === 0) {
                         return Promise.reject(
                             new Error(
@@ -44,23 +38,34 @@ class SearchInfo extends PureComponent {
                         );
                     }
 
+                    this.setState({
+                        images: images.hits,
+                        status: 'resolved',
+                    });
+                })
+                .catch(error => this.setState({ error, status: 'rejected' }))
+                .finally(this.scroll);
+        }
+
+        if (prevPage !== nextPage && prevPage < nextPage) {
+            this.setState({ status: 'pending' });
+
+            pixabayAPI
+                .fetchImage(nextImageValue, nextPage)
+                .then(images => {
                     this.setState(prevState => ({
                         images: [...prevState.images, ...images.hits],
                         status: 'resolved',
                     }));
-
-                    // Как-то ненормально перематывается!!!
-                    this.scroll();
                 })
-                .catch(error => this.setState({ error, status: 'rejected' }));
+                .catch(error => this.setState({ error, status: 'rejected' }))
+                .finally(this.scroll);
         }
     }
 
     updatePage = () => {
-        console.log(this.state.page);
-
-        this.setState(prevState => ({
-            page: prevState.page + 1,
+        this.setState(({ page }) => ({
+            page: page + 1,
         }));
     };
 
@@ -75,7 +80,7 @@ class SearchInfo extends PureComponent {
         const { status, error, images } = this.state;
 
         if (status === 'idle') {
-            return <p className="idleText">What are we looking for?</p>;
+            return <p className={s.idleText}>What are we looking for?</p>;
         }
 
         if (status === 'pending') {
@@ -83,7 +88,6 @@ class SearchInfo extends PureComponent {
         }
 
         if (status === 'resolved') {
-            // console.log(images);
             return (
                 <>
                     <ImageGallery images={images} />
@@ -93,7 +97,7 @@ class SearchInfo extends PureComponent {
         }
 
         if (status === 'rejected') {
-            return <p className="rejectedText">{error.message}</p>;
+            return <p className={s.rejectedText}>{error.message}</p>;
         }
     }
 }

@@ -1,16 +1,16 @@
 import ImageGalleryItem from '../ImageGalleryItem';
+import s from './ImageGallery.module.css';
 
 function ImageGallery({ images }) {
     return (
-        <ul className="ImageGallery">
+        <ul className={s.ImageGallery}>
             {images.map(({ id, webformatURL, tag, largeImageURL }) => (
-                <li key={id} className="ImageGalleryItem">
-                    <ImageGalleryItem
-                        webformatURL={webformatURL}
-                        tag={tag}
-                        largeImageURL={largeImageURL}
-                    />
-                </li>
+                <ImageGalleryItem
+                    key={id}
+                    webformatURL={webformatURL}
+                    tag={tag}
+                    largeImageURL={largeImageURL}
+                />
             ))}
         </ul>
     );

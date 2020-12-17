@@ -1,5 +1,6 @@
 import { PureComponent } from 'react';
 import { createPortal } from 'react-dom';
+import s from './Modal.module.css';
 
 const modalRoot = document.querySelector('#modal-root');
 
@@ -27,8 +28,8 @@ class Modal extends PureComponent {
     render() {
         const { tag, largeImageURL } = this.props;
         return createPortal(
-            <div className="Overlay" onClick={this.handleOverlayClick}>
-                <div className="Modal">
+            <div className={s.Overlay} onClick={this.handleOverlayClick}>
+                <div className={s.Modal}>
                     <img src={largeImageURL} alt={tag} />
                 </div>
             </div>,

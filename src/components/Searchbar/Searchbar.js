@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
+import s from './Searchbar.module.css';
 
 function Searchbar({ children }) {
-    return <header className="Searchbar">{children}</header>;
+    return <header className={s.Searchbar}>{children}</header>;
 }
 
 Searchbar.propTypes = {
