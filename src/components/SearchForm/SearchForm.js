@@ -1,5 +1,6 @@
 import { PureComponent } from 'react';
 
+import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import s from './SearchForm.module.css';
@@ -45,5 +46,9 @@ class SearchForm extends PureComponent {
         );
     }
 }
+
+SearchForm.propTypes = {
+    onSubmit: PropTypes.func.isRequired,
+};
 
 export default SearchForm;

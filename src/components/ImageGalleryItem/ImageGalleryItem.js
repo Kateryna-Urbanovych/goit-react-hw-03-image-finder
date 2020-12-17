@@ -1,4 +1,5 @@
 import { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 
 import Modal from '../Modal';
 import s from './ImageGalleryItem.module.css';
@@ -39,5 +40,11 @@ class ImageGalleryItem extends PureComponent {
         );
     }
 }
+
+ImageGalleryItem.propTypes = {
+    webformatURL: PropTypes.string.isRequired,
+    tag: PropTypes.string,
+    largeImageURL: PropTypes.string.isRequired,
+};
 
 export default ImageGalleryItem;

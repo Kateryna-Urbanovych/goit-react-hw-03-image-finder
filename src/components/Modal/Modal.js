@@ -1,5 +1,6 @@
 import { PureComponent } from 'react';
 import { createPortal } from 'react-dom';
+import PropTypes from 'prop-types';
 import s from './Modal.module.css';
 
 const modalRoot = document.querySelector('#modal-root');
@@ -37,5 +38,10 @@ class Modal extends PureComponent {
         );
     }
 }
+
+Modal.propTypes = {
+    tag: PropTypes.string.isRequired,
+    largeImageURL: PropTypes.string.isRequired,
+};
 
 export default Modal;

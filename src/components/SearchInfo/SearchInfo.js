@@ -5,6 +5,7 @@ import ImageGallery from '../ImageGallery';
 import Button from '../Button';
 import LoaderSpinner from '../LoaderSpinner';
 import s from './SearchInfo.module.css';
+import PropTypes from 'prop-types';
 
 class SearchInfo extends PureComponent {
     state = {
@@ -101,5 +102,9 @@ class SearchInfo extends PureComponent {
         }
     }
 }
+
+SearchInfo.propTypes = {
+    imageValue: PropTypes.string.isRequired,
+};
 
 export default SearchInfo;
